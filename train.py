@@ -7,7 +7,7 @@ from torchvision import datasets
 from torchvision import transforms
 import numpy as np
 import pickle
-from model import AlexNet
+from model import ZFNet 
 
 # Select device to train on
 device = torch.device("cuda")
@@ -16,6 +16,7 @@ def train(model, train_dl, test_dl, opt, loss_func, epochs):
     """ train model using using provided datasets, optimizer and loss function """
     train_loss = [0 for i in range(epochs)]
     test_loss = [0 for i in range(epochs)]
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(opt)
     for epoch in range(epochs):
         model.train()
         for xb, yb in train_dl:
@@ -38,6 +39,7 @@ def train(model, train_dl, test_dl, opt, loss_func, epochs):
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
         print(f'Epoch: {epoch+1}/{epochs}, Train Loss: {train_loss[epoch]}, Test Loss {test_loss[epoch]}, Accuracy: {100*correct/total}')
+        scheduler.step(test_loss[epoch])
     return train_loss, test_loss
 
 if __name__ == "__main__":
@@ -49,8 +51,8 @@ if __name__ == "__main__":
     train_dl = torch.utils.data.DataLoader(train_data, batch_size=64, shuffle=True, num_workers=4)
     test_dl = torch.utils.data.DataLoader(test_data, batch_size=64, shuffle=True, num_workers=4)
     # Train Model
-    epochs = 25
-    model = AlexNet().to(device)
+    epochs = 100 
+    model = ZFNet().to(device)
     loss_func = nn.CrossEntropyLoss()
     opt = optim.Adam(model.parameters(), lr=0.0001)
     train_loss, test_loss = train(model, train_dl, test_dl, opt, loss_func, epochs)

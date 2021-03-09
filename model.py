@@ -6,8 +6,8 @@ class ZFNet(nn.Module):
         Understanding Convolutional Networks' by Zeiler and Fergus"""
     def __init__(self):
         super().__init__()
-        self.conv1 = nn.Conv2d(3, 96, kernel_size=7, stride=2, padding=5, padding_mode='reflect') 
-        self.conv2 = nn.Conv2d(96, 256, kernel_size=5, stride=1, padding=2, padding_mode='reflect')
+        self.conv1 = nn.Conv2d(3, 96, kernel_size=7, stride=2, padding=3, padding_mode='reflect') 
+        self.conv2 = nn.Conv2d(96, 256, kernel_size=5, stride=2, padding=2, padding_mode='reflect')
         self.conv3 = nn.Conv2d(256, 384, kernel_size=3, stride=1, padding=1, padding_mode='reflect')
         self.conv4 = nn.Conv2d(384, 384, kernel_size=3, stride=1, padding=1, padding_mode='reflect')
         self.conv5 = nn.Conv2d(384, 256, kernel_size=3, stride=1, padding=1, padding_mode='reflect')
